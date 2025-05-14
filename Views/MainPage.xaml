@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ToDoApp.ViewModels"
+             x:Class="ToDoApp.Views.MainPage"
+             Title="ToDoApp">
+  <ContentPage.BindingContext>
+    <viewmodels:MainViewModel />
+  </ContentPage.BindingContext>
+
+  <ScrollView>
+    <StackLayout Padding="20" Spacing="15">
+      <Entry Placeholder="Title" Text="{Binding NewItem.Title}" />
+      <Editor Placeholder="Description" AutoSize="TextChanges" HeightRequest="100" Text="{Binding NewItem.Description}" />
+      <DatePicker Date="{Binding NewItem.DueDate, Mode=TwoWay}" Format="yyyy-MM-dd" />
+      <Label Text="{Binding ValidationMessage}" TextColor="Red" IsVisible="{Binding ValidationMessage, Converter={StaticResource StringNotEmptyConverter}}" />
+      <Button Text="Save Task" Command="{Binding SaveCommand}" />
+
+      <Label Text="Tasks:" FontAttributes="Bold" FontSize="Medium" />
+      <CollectionView ItemsSource="{Binding Items}">
+        <CollectionView.ItemTemplate>
+          <DataTemplate>
+            <SwipeView>
+              <SwipeView.RightItems>
+                <SwipeItems>
+                  <SwipeItem Text="Delete"
+                             BackgroundColor="Red"
+                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainViewModel}}, Path=DeleteCommand}"
+                             CommandParameter="{Binding .}" />
+                </SwipeItems>
+              </SwipeView.RightItems>
+
+              <Grid Padding="10">
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                  <CheckBox IsChecked="{Binding IsCompleted, Mode=TwoWay}" />
+                  <StackLayout>
+                    <Label Text="{Binding Title}" FontAttributes="Bold" />
+                    <Label Text="{Binding Description}" FontSize="Small" />
+                    <Label Text="{Binding DueDate, StringFormat='Due: {0:yyyy-MM-dd}'}" FontSize="Small" />
+                  </StackLayout>
+                </StackLayout>
+              </Grid>
+            </SwipeView>
+          </DataTemplate>
+        </CollectionView.ItemTemplate>
+      </CollectionView>
+    </StackLayout>
+  </ScrollView>
+</ContentPage>
