@@ -37,6 +37,7 @@
                     <Label Text="{Binding Title}" FontAttributes="Bold" />
                     <Label Text="{Binding Description}" FontSize="Small" />
                     <Label Text="{Binding DueDate, StringFormat='Due: {0:yyyy-MM-dd}'}" FontSize="Small" />
+                    <Button Text="Open" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MainViewModel}}, Path=OpenCommand}" CommandParameter="{Binding .}" />
                   </StackLayout>
                 </StackLayout>
               </Grid>

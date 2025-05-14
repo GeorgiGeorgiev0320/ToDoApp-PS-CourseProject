@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using ToDoApp.Models;
 using ToDoApp.Services;
+using ToDoApp.Views;
 
 namespace ToDoApp.ViewModels
 {
@@ -14,6 +15,7 @@ namespace ToDoApp.ViewModels
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SaveCommand { get; }
+        public ICommand OpenCommand { get; }
 
         private TodoItem _newItem = new();
         public TodoItem NewItem
@@ -44,6 +46,7 @@ namespace ToDoApp.ViewModels
             AddCommand = new Command(async () => await AddItem());
             DeleteCommand = new Command<TodoItem>(async (item) => await DeleteItem(item));
             SaveCommand = new Command(async () => await SaveNewItem());
+            OpenCommand = new Command<TodoItem>(async (item) => await OpenItem(item));
 
             LoadItems();
         }
@@ -98,6 +101,11 @@ namespace ToDoApp.ViewModels
         {
             await _database.DeleteItemAsync(item);
             Items.Remove(item);
+        }
+
+        private async Task OpenItem(TodoItem item)
+        {
+            await App.Current.MainPage.Navigation.PushAsync(new TaskDetailPage(item));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
